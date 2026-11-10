@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#090d1c">
+<title>Sana Özel Bir Sürpriz</title>
+<style>
+*{box-sizing:border-box}
+:root{--cyan:#65e7ff;--violet:#a78bfa;--text:#edf4ff}
+body{margin:0;min-height:100vh;min-height:100svh;padding:22px 16px;display:grid;place-items:center;color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:radial-gradient(ellipse at 18% 18%,rgba(62,119,255,.22),transparent 38%),radial-gradient(ellipse at 85% 82%,rgba(143,76,255,.20),transparent 40%),linear-gradient(145deg,#080c18,#111a32 58%,#090d1c)}
+.card{width:min(100%,440px);padding:clamp(26px,7vw,38px) 24px;text-align:center;border:1px solid rgba(101,231,255,.48);border-radius:18px;background:rgba(12,19,38,.90);box-shadow:0 0 0 1px rgba(167,139,250,.10) inset,0 0 26px rgba(58,183,255,.13),0 18px 55px rgba(0,0,0,.42);backdrop-filter:blur(12px)}
+.accent{width:54px;height:3px;margin:0 auto 24px;border-radius:4px;background:linear-gradient(90deg,var(--cyan),var(--violet));box-shadow:0 0 13px rgba(101,231,255,.75)}
+.eyebrow{margin:0 0 10px;color:var(--cyan);font-size:12px;letter-spacing:3px;text-transform:uppercase}
+h1{margin:0 0 24px;color:#f5f7ff;font-size:clamp(25px,7vw,31px);font-weight:650;text-shadow:0 0 18px rgba(101,231,255,.22)}
+.hint{margin:0 auto 17px;padding:15px 14px;border:1px solid rgba(167,139,250,.35);border-radius:10px;background:rgba(167,139,250,.08);color:#e5ddff;font-size:15px;line-height:1.9}
+input{display:block;width:min(100%,245px);margin:0 auto 14px;padding:14px 12px;border:1px solid rgba(101,231,255,.55);border-radius:10px;outline:none;background:rgba(4,9,22,.8);color:white;text-align:center;font-size:23px;letter-spacing:9px;direction:ltr}
+input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(101,231,255,.10),0 0 18px rgba(101,231,255,.15)}
+button{width:min(100%,245px);padding:14px 18px;border:1px solid rgba(101,231,255,.65);border-radius:10px;background:linear-gradient(100deg,rgba(34,128,170,.95),rgba(91,76,170,.95));color:#fff;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 0 18px rgba(75,180,255,.18)}
+button:active{transform:translateY(1px)}
+#error{min-height:22px;margin-top:12px;color:#ff9caa;font-size:13px}
+#videoSection{display:none}
+video{display:block;width:100%;max-height:78svh;margin:18px auto 0;border-radius:10px;background:#000;object-fit:contain}
+.foot{margin-top:22px;color:#8495b5;font-size:11px;letter-spacing:.4px}
+</style>
+</head>
+<body>
+<main class="card">
+  <section id="passwordSection">
+    <div class="accent"></div>
+    <p class="eyebrow">Sana Özel</p>
+    <h1>Küçük Bir Sürpriz</h1>
+    <div class="hint">
+      Şifre dört rakamdır.<br>
+      Son yıllarda başına gelen en güzel şeylerden biri.
+    </div>
+    <form id="passwordForm">
+      <input id="passwordInput" type="text" inputmode="numeric"
+        maxlength="4" autocomplete="off" autocapitalize="off"
+        spellcheck="false" aria-label="Şifre" placeholder="••••" required>
+      <button type="submit">Giriş</button>
+    </form>
+    <div id="error" role="alert" aria-live="polite"></div>
+    <div class="foot">Sana özel küçük bir sürpriz</div>
+  </section>
+
+  <section id="videoSection">
+    <div class="accent"></div>
+    <h1>İyi seyirler</h1>
+    <video id="birthdayVideo" controls playsinline preload="metadata">
+      <source src="./birthday.mp4" type="video/mp4">
+      Tarayıcın video oynatmayı desteklemiyor.
+    </video>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+
+  var validPasswords = ["1403", "1030"];
+  var form = document.getElementById("passwordForm");
+  var input = document.getElementById("passwordInput");
+  var error = document.getElementById("error");
+
+  function normalizeDigits(value) {
+    return value
+      .replace(/[۰-۹]/g, function (digit) {
+        return String("۰۱۲۳۴۵۶۷۸۹".indexOf(digit));
+      })
+      .replace(/[٠-٩]/g, function (digit) {
+        return String("٠١٢٣٤٥٦٧٨٩".indexOf(digit));
+      })
+      .replace(/\s/g, "");
+  }
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    var entered = normalizeDigits(input.value);
+
+    if (validPasswords.indexOf(entered) !== -1) {
+      document.getElementById("passwordSection").style.display = "none";
+      document.getElementById("videoSection").style.display = "block";
+      var video = document.getElementById("birthdayVideo");
+      video.play().catch(function () {});
+    } else {
+      error.textContent = "Şifre yanlış. Tekrar deneyin.";
+      input.value = "";
+      input.focus();
+    }
+  });
+})();
+</script>
+</body>
+</html>
